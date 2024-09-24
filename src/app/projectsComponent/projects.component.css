@@ -1,0 +1,66 @@
+.card{
+    cursor: default;
+    transition: all 0.2s ease-out;
+}
+
+.separator{
+    height: 50px;
+}
+
+.icons{
+    display: flex;
+    gap: 3%;
+}
+
+.bi{
+    transform: scale(1.3);
+    transition: all 0.2s ease-out;
+}
+
+.bi:hover{
+    transform: scale(1.5);
+    cursor: pointer;
+}
+
+.bi-trash:hover{
+    color: #dc3545;
+}
+
+.bi-pencil-square:hover{
+    color: #ffc107;
+}
+
+.bi-arrow-bar-right:hover{
+    color: #28a745;
+}
+
+.editProjectInput {
+    border: none; 
+    background: none; 
+    outline: none; 
+    font-size: inherit; 
+    color: inherit; 
+    padding: 2px 0; 
+    margin: 0; 
+    flex: 1;
+}
+
+textarea{
+    width: 100%;
+    resize: none;
+    height: 4rem;
+}
+
+.titleEdit{
+    height: 3rem;
+}
+
+@media only screen and (max-width: 415px){
+    .modal-content{
+        width: 85%;
+    }
+
+    .modal-dialog {
+        justify-content: center !important;
+    }
+}

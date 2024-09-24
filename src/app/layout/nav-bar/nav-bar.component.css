@@ -1,0 +1,38 @@
+.register{
+    margin-right: 5px;
+}
+
+.navbar-toggler{
+    background-color: #0066FF;
+}
+
+.dropdown-center{
+    display: none;
+}
+
+@media only screen and (max-width: 991px){
+    .dropstart{
+        display: none;
+    }
+    
+    .dropdown-center{
+        display: inline;
+    }
+}
+
+.nav-link.text-light{
+    opacity: 0.7;
+}
+
+.active{
+    opacity: 1 !important;
+}
+
+.navbar-brand{
+    transition: all 0.2s ease-out;
+    font-weight: 800;
+    background-image: linear-gradient(to right, #91bcfc, white) !important;
+    background-clip: text !important;
+    color: transparent !important;
+}
+

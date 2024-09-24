@@ -1,0 +1,35 @@
+<div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content shadow-lg">
+        <div class="modal-header d-flex bd-highlight">
+            <svg xmlns="http://www.w3.org/2000/svg" (click)="this.myForm.reset()" width="16" height="16" fill="currentColor" class="bi bi-arrow-left" viewBox="0 0 16 16" data-bs-dismiss="modal" aria-label="Close">
+                <path fill-rule="evenodd" d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8"/>
+            </svg>
+            <h1 class="modal-title fs-5 bd-highlight align-self-center" id="staticBackdropLabel" style="margin: 0 auto;">Añadir proyecto</h1>
+        </div>                      
+        <div class="modal-body p-4">
+            <form [formGroup]="myForm" (submit)="submit()">
+                <div class="mb-3">
+                    <label class="form-label" for="name">Nombre</label>
+                    <input type="text" id="name" class="form-control" formControlName="name"
+                      placeholder="Introduce el nombre del proyecto" />
+                    @if (isValid('name')) {
+                        <span class="text-danger" >El nombre del proyecto es obligatorio</span>
+                    }  
+                </div>
+                <div class="mb-3">
+                    <label class="form-label" for="description">Descripción</label>
+                    <input type="text" id="description" class="form-control" formControlName="description"
+                        placeholder="Introduce la descripción del proyecto" />
+                    @if (isValid('description')) {
+                        <span class="text-danger" >La descripción del proyecto es obligatoria</span>
+                    }
+                </div>
+                <hr>
+                <div class="d-flex gap-2">
+                    <a class="btn btn-danger bg-gradient w-50" id="cancelButton" data-bs-dismiss="modal" (click)="this.myForm.reset()">Cancelar</a>
+                    <button class="btn btn-success bg-gradient w-50" type="submit" id="save">Guardar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+  </div>

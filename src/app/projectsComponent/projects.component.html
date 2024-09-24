@@ -1,0 +1,53 @@
+<div class="container mt-5">
+  <div class="row">
+    @for (project of projects; track $index) {
+      <div class="col-lg-3 col-md-6 mb-4">
+          <div class="card bg-dark text-light">
+              <div class="card-body">
+                @if(projectEditOrDelete.id == project.id && editing){
+                  <h2><textarea type="text" [value]="project.name" class="editProjectInput titleEdit" (keydown)="handleKeydown($event, projectTitleInput, projectDescriptionInput)" #projectTitleInput></textarea></h2>
+                  <p><textarea type="text" [value]="project.description" class="editProjectInput" (keydown)="handleKeydown($event, projectTitleInput, projectDescriptionInput)" #projectDescriptionInput></textarea></p>
+                  <div class="d-flex gap-2">
+                    <a class="btn btn-danger btn-sm bg-gradient" (click)="removeEdit()">Cancelar</a>
+                    <a class="btn btn-success btn-sm bg-gradient" (click)="confirmEdit(projectTitleInput.value, projectDescriptionInput.value)">Guardar</a>
+                  </div>
+                }@else {
+                  <h2 class="card-title">{{project.name}}</h2>
+                  <p class="card-text">{{project.description}}</p>
+                  <div class="icons">
+                    <i class="bi bi-trash" data-bs-toggle="modal" data-bs-target="#deleteProjectModal" (click)="removeProject(project)"></i>
+                    <i class="bi bi-pencil-square" (click)="edit(project)"></i>
+                    <i class="bi bi-arrow-bar-right" [routerLink]="['/project',project.id]"></i>
+                  </div>
+                }
+              </div>
+          </div>
+      </div>
+    }
+  </div>
+  <div class="modal fade" id="deleteProjectModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content shadow-lg">
+          <div class="modal-header d-flex bd-highlight">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-left" viewBox="0 0 16 16" data-bs-dismiss="modal" aria-label="Close">
+                  <path fill-rule="evenodd" d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8"/>
+              </svg>
+              <h1 class="modal-title fs-5 bd-highlight align-self-center" id="staticBackdropLabel" style="margin: 0 auto;">¿Estás seguro?</h1>
+          </div>                      
+          <div class="modal-body p-4">
+              <form>
+                  <div class="mb-3">
+                    ¿Estás seguro de elimar el proyecto <span class="text-danger">{{projectEditOrDelete.name}}</span>?
+                  </div>
+                  <hr>
+                  <div class="d-flex gap-2">
+                      <a class="btn btn-primary bg-gradient w-50" id="cancelButton" data-bs-dismiss="modal">Cancelar</a>
+                      <a class="btn btn-danger bg-gradient w-50" id="loginButton" data-bs-dismiss="modal" (click)="confirmRemoveProject()">Confirmar</a>
+                  </div>
+              </form>
+          </div>
+      </div>
+    </div>
+  </div>
+  <div class="separator"></div>
+</div>
