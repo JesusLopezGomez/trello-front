@@ -1,0 +1,63 @@
+<div class="container mt-5">
+    <div class="row">
+        @for (board of boards; track $index) {
+        <div class="col-lg-3 col-md-6 mb-4">
+            <div class="card bg-dark text-light">
+                <div class="card-body">
+                    <h2 class="card-title mb-0">{{ board.name }}</h2>
+                    <hr class="mt-1">
+
+                    <div class="task-container" 
+                         style="max-height: 400px; overflow-y: auto;"
+                         cdkDropList 
+                         id="board-{{ $index }}" 
+                         [cdkDropListData]="board.taskDTOs" 
+                         [cdkDropListConnectedTo]="getConnectedBoardIds()" 
+                         (cdkDropListDropped)="dropTask($event, $index, board.id)">
+                        @if (board.taskDTOs.length === 0) {
+                            <div class="d-flex addNewTask bg-light text-dark p-2 text-left w-100">
+                                <a href="" class="addNewTaskText">Añadir nueva tarea</a>
+                                <i class="bi bi-plus-circle ms-auto"></i>
+                            </div>
+                        }
+                        @for (task of board.taskDTOs; track $index) {  
+                        <div cdkDrag>
+                            <a class="task-title" data-bs-toggle="collapse" 
+                               href="#collapseTask{{ task.id }}" 
+                               role="button" 
+                               aria-expanded="false" 
+                               (click)="toggleTask(task.id)">
+                                <div class="card mb-2 bg-light text-dark">
+                                    <div class="card-header p-2 d-flex">
+                                        <div>
+                                            <p class="mb-0">{{ task.title }}</p>
+                                        </div>
+                                        <div class="ms-auto">
+                                            <i [ngClass]="{
+                                                'bi-caret-down': !isTaskOpen(task.id),
+                                                'bi-caret-up': isTaskOpen(task.id)
+                                            }"></i>
+                                        </div>
+                                    </div>
+
+                                    <div id="collapseTask{{ task.id }}" class="collapse">
+                                        <div class="card-body mb-0">
+                                            <p>{{ task.description }}</p>
+                                            <div class="d-flex iconsManage">
+                                                <i class="bi bi-trash"></i>
+                                                <i class="bi bi-pencil-square"></i>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                    }
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+    </div>
+</div>
+

@@ -29,5 +29,14 @@ export interface Board {
     id:        number;
     name:      string;
     idProject: number;
-    taskDTOs:  any[];
+    taskDTOs:  Task[];
+}
+
+export interface Task {
+    id:          number;
+    title:       string;
+    description: string;
+    order:       number;
+    idBoard:     number;
+    idUser:      number;
 }

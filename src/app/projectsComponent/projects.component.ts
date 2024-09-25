@@ -50,11 +50,10 @@ export class projectsComponent implements OnInit{
     this.projectEditOrDelete = project;
     this.editing = true;
     setTimeout(() => {
-      // Selecciona el texto del input después de que se muestre
       if (this.projectTitleInput) {
         this.projectTitleInput.nativeElement.focus();
       }
-    }, 0); // Tiempo para permitir que Angular renderice el DOM
+    }, 0);
   }
 
   removeEdit(){

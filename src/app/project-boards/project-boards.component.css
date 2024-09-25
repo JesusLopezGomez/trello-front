@@ -1,0 +1,59 @@
+.task-title{
+    text-decoration: none;
+    color: black;
+}
+
+.addNewTaskText{
+    text-decoration: none;
+    color: white;
+}
+
+.bi-caret-down, .bi-caret-up{
+    font-size: 13pt;
+}
+
+.card-header{
+    background-color: rgb(241, 241, 241) !important;
+}
+
+.bi-trash, .bi-pencil-square, .bi-arrow-bar-right{
+    font-size: 15pt;
+}
+
+.bi-plus-circle{
+    font-size: 13pt;
+}
+
+.bi-plus-circle:hover{
+    transform: scale(1.1);
+    color: #28a745;
+    cursor: pointer;
+}
+
+.iconsManage{
+    justify-content: left;
+    gap: 0.35rem;
+}
+
+.bi{
+    transition: all 0.2s ease-in;  
+}
+
+.bi:hover{
+    transform: scale(1.2);
+    transition: all 0.2s ease-out;
+}
+
+.bi-trash:hover{
+    color:#dc3545;
+}
+
+.bi-pencil-square:hover{
+    color: #ffc107;
+}
+
+.addNewTask{
+    background-color: rgb(159, 160, 160) !important;
+    border-radius: 5px;
+    color: white !important;
+}
