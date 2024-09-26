@@ -16,4 +16,12 @@ export class BoardService {
   getBoardsByProjects(idProject:number):Observable<Board[]>{
     return this.http.get<Board[]>(`${this.baseUrl}/byProject/${idProject}`);
   }
+
+  save(nameAndIdProject:any):Observable<Board>{
+    return this.http.post<Board>(`${this.baseUrl}/add`,nameAndIdProject);
+  }
+
+  delete(idBoard:number):Observable<Board>{
+    return this.http.delete<Board>(`${this.baseUrl}/delete/${idBoard}`);
+  }
 }

@@ -1,63 +1,162 @@
 <div class="container mt-5">
     <div class="row">
+        <h1 class="text-center fs-1">{{project?.name}}</h1>
         @for (board of boards; track $index) {
         <div class="col-lg-3 col-md-6 mb-4">
             <div class="card bg-dark text-light">
                 <div class="card-body">
-                    <h2 class="card-title mb-0">{{ board.name }}</h2>
+                    <div class="d-flex">
+                        <div>
+                            <h2 class="card-title mb-0">{{ board.name }}</h2>
+                        </div>
+                        <div class="ms-auto gap-1 d-flex iconsManageBoard mt-1">
+                            <i class="bi bi-trash" (click)="deleteBoard(board.id)"></i>
+                            <i class="bi bi-pencil-square"></i>
+                        </div>
+                    </div>
                     <hr class="mt-1">
 
                     <div class="task-container" 
-                         style="max-height: 400px; overflow-y: auto;"
+                         style="max-height: 400px; overflow-y: auto; min-height: 5px;"
                          cdkDropList 
                          id="board-{{ $index }}" 
                          [cdkDropListData]="board.taskDTOs" 
                          [cdkDropListConnectedTo]="getConnectedBoardIds()" 
                          (cdkDropListDropped)="dropTask($event, $index, board.id)">
-                        @if (board.taskDTOs.length === 0) {
-                            <div class="d-flex addNewTask bg-light text-dark p-2 text-left w-100">
-                                <a href="" class="addNewTaskText">Añadir nueva tarea</a>
-                                <i class="bi bi-plus-circle ms-auto"></i>
-                            </div>
-                        }
-                        @for (task of board.taskDTOs; track $index) {  
-                        <div cdkDrag>
-                            <a class="task-title" data-bs-toggle="collapse" 
-                               href="#collapseTask{{ task.id }}" 
-                               role="button" 
-                               aria-expanded="false" 
-                               (click)="toggleTask(task.id)">
-                                <div class="card mb-2 bg-light text-dark">
-                                    <div class="card-header p-2 d-flex">
-                                        <div>
-                                            <p class="mb-0">{{ task.title }}</p>
+                        @for (task of board.taskDTOs; track $index) {
+                        
+                            @if(idTaskEditing == task.id){
+                            <div>
+                                <div class="task-title" role="button">
+                                    <div class="card mb-2 text-dark">
+                                        <div class="card-header p-2 d-flex addNewTask">
+                                            <div class="mb-0">
+                                                <p class="mb-0">
+                                                    <input type="text" 
+                                                           [value]="task.title"
+                                                           class="addNewTaskText" #titleTaskEdit/>
+                                                </p>
+                                            </div>
+                                            <div class="ms-auto">
+                                                <i class="bi bi-plus-circle ms-auto"></i>
+                                            </div>
                                         </div>
-                                        <div class="ms-auto">
-                                            <i [ngClass]="{
-                                                'bi-caret-down': !isTaskOpen(task.id),
-                                                'bi-caret-up': isTaskOpen(task.id)
-                                            }"></i>
-                                        </div>
-                                    </div>
-
-                                    <div id="collapseTask{{ task.id }}" class="collapse">
-                                        <div class="card-body mb-0">
-                                            <p>{{ task.description }}</p>
-                                            <div class="d-flex iconsManage">
-                                                <i class="bi bi-trash"></i>
-                                                <i class="bi bi-pencil-square"></i>
+                            
+                                        <div [ngClass]="{'collapse': true, 'show': true}" id="collapseNewTask">
+                                            <div class="card-body mb-0">
+                                                <p class="mb-2">
+                                                    <textarea type="text" 
+                                                            [value]="task.description" 
+                                                              (click)="$event.stopPropagation()" #descriptionEdit></textarea>
+                                                </p>
+                                                <div class="d-flex gap-1">
+                                                    <a class="btn btn-danger btn-sm bg-gradient" (click)="closeEdit(task)">Cancelar</a>
+                                                    <a class="btn btn-success btn-sm bg-gradient" (click)="updateTask(titleTaskEdit.value,descriptionEdit.value, task)">Editar</a>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-                            </a>
-                        </div>
+                            </div>
+                            }@else {
+                            <div cdkDrag>
+                                <a class="task-title" data-bs-toggle="collapse" 
+                                   href="#collapseTask{{ task.id }}" 
+                                   role="button" 
+                                   aria-expanded="false" 
+                                   (click)="toggleTask(task.id)">
+                                    <div class="card mb-2 bg-light text-dark">
+                                        <div class="card-header p-2 d-flex">
+                                            <div>
+                                                <p class="mb-0">{{ task.title }}</p>
+                                            </div>
+                                            <div class="ms-auto">
+                                                <i [ngClass]="{
+                                                    'bi-caret-down': !isTaskOpen(task.id),
+                                                    'bi-caret-up': isTaskOpen(task.id)
+                                                }"></i>
+                                            </div>
+                                        </div>
+    
+                                        <div id="collapseTask{{ task.id }}" class="collapse">
+                                            <div class="card-body mb-0">
+                                                <p>{{ task.description }}</p>
+                                                <div class="d-flex iconsManage">
+                                                    <i class="bi bi-trash" (click)="deleteTask(task.id)"></i>
+                                                    <i class="bi bi-pencil-square" (click)="setIdTaskEditing(task.id)"></i>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </a>
+                            </div>
+                        } 
                     }
+                </div>
+                <div>
+                    <div class="task-title" role="button">
+                        <div class="card mb-2 text-dark">
+                            <div class="card-header p-2 d-flex addNewTask" (click)="openNewTask(board.id)">
+                                <div class="mb-0">
+                                    <p class="mb-0">
+                                        <input type="text" 
+                                               placeholder="Añadir nueva tarea" 
+                                               class="addNewTaskText" (click)="openNewTask(board.id)" #titleTaskNew/>
+                                    </p>
+                                </div>
+                                <div class="ms-auto">
+                                    <i class="bi bi-plus-circle"></i>
+                                </div>
+                            </div>
+                
+                            <div [ngClass]="{'collapse': currentBoardId !== board.id, 'show': currentBoardId === board.id}" id="collapseNewTask">
+                                <div class="card-body mb-0">
+                                    <p class="mb-2">
+                                        <textarea type="text" 
+                                                  placeholder="Introduce descripción de la nueva tarea..." 
+                                                  (click)="$event.stopPropagation()" #description></textarea>
+                                    </p>
+                                    <div class="d-flex gap-1">
+                                        <a class="btn btn-danger btn-sm bg-gradient" (click)="closeNewTask(titleTaskNew,description)">Cancelar</a>
+                                        <a class="btn btn-success btn-sm bg-gradient" (click)="saveNewTask(titleTaskNew,description, board.id)">Guardar</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
+                </div>
                 </div>
             </div>
         </div>
     }
+        <div class="col-lg-3 col-md-6 mb-4">
+            <div class="card bg-dark text-light">
+                <div class="card-body">
+                    <div class="d-flex newBoard">
+                            @if(!isClickNewBoard){
+                                <div>
+                                    <h2 class="card-title mb-0" (click)="newBoard()">Añadir nuevo tablero</h2>
+                                </div>
+                            }@else {
+                                <div>
+                                    <h2 class="card-title mb-0"><input type="text" 
+                                        placeholder="Añadir nuevo tablero" 
+                                        class="addNewBoardText" (keydown)="handleKeydown($event,nameBoard.value)" #nameBoard/></h2>
+                                    
+                                        <div class="d-flex gap-1 mt-2">
+                                            <a class="btn btn-danger btn-sm bg-gradient" (click)="cancelNewBoard()">Cancelar</a>
+                                            <a class="btn btn-success btn-sm bg-gradient" (click)="saveNewBoard(nameBoard.value)">Guardar</a>
+                                        </div>
+                                </div>
+                            }
+                            <div class="ms-auto">
+                                <i class="bi bi-plus" (click)="newBoard()"></i>
+                            </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
+    <div class="separator"></div>
 </div>
 

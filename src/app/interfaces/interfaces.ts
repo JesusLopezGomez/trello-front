@@ -40,3 +40,10 @@ export interface Task {
     idBoard:     number;
     idUser:      number;
 }
+
+export interface TaskSave {
+    title:       string;
+    description: string;
+    idBoard:     number;
+    idUser:      number;
+}

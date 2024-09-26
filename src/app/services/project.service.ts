@@ -17,6 +17,10 @@ export class projectService {
     return this.http.get<Project[]>(`${this.baseUrl}/user/${idUser}`);
   }
 
+  getById(idProject : number):Observable<Project>{
+    return this.http.get<Project>(`${this.baseUrl}/search/${idProject}`);
+  }
+
   updateProject(project:Project):Observable<Project>{
     return this.http.put<Project>(`${this.baseUrl}/update/${project.id}`,project);
   }

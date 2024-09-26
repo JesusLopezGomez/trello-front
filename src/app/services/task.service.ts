@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from '../../environments/environment.development';
-import { Task } from '../interfaces/interfaces';
+import { Task, TaskSave } from '../interfaces/interfaces';
 import { Observable } from 'rxjs';
 
 @Injectable({
@@ -19,5 +19,13 @@ export class TaskService {
 
   orderTasks(tasks:Task[]):void{
     this.http.post(`${this.baseUrl}/orderTasks`,tasks).subscribe();
+  }
+
+  save(task:TaskSave):Observable<Task>{
+    return this.http.post<Task>(`${this.baseUrl}/add`,task);
+  }
+
+  delete(idTask:number):Observable<Task>{
+    return this.http.delete<Task>(`${this.baseUrl}/delete/${idTask}`);
   }
 }

@@ -1,5 +1,5 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { Board, Task } from '../interfaces/interfaces';
+import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
+import { Board, Project, Task } from '../interfaces/interfaces';
 import { BoardService } from '../services/board.service';
 import { Notyf } from 'notyf';
 import { Router } from '@angular/router';
@@ -7,6 +7,8 @@ import { CommonModule } from '@angular/common';
 import { CdkDragDrop, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { TaskService } from '../services/task.service';
+import { UserService } from '../services/user.service';
+import { projectService } from '../services/project.service';
 
 @Component({
   selector: 'app-project-boards',
@@ -19,10 +21,14 @@ export class ProjectBoardsComponent implements OnInit{
   
   constructor(private boardService : BoardService,
       private taskService : TaskService,
-      private router : Router
+      private userService : UserService,
+      private projectService : projectService,
+      private router : Router,
   ){}
 
   @Input() id : number = 0;
+
+  project : Project | null = null;
 
   boards : Board[] = [];
 
@@ -30,8 +36,29 @@ export class ProjectBoardsComponent implements OnInit{
 
   movingTaskId: number | null = null;
 
+  openedTasks: { [taskId: number]: boolean } = {};
+
+  currentBoardId : number = 0; 
+
+  idTaskEditing : number = 0;
+
+  isClickNewBoard : boolean = false;
+
+  @ViewChild('titleTaskEdit') titleTaskInputEdit!: ElementRef;
+
+  @ViewChild('nameBoard') nameNewBoard!: ElementRef;
+
   ngOnInit(): void {
     if(!isNaN(this.id)){
+      this.projectService.getById(this.id).subscribe({
+        next:(project) => {
+          this.project = project;
+        },
+        error:(error) => {
+          this.notyf.error(error.error.messages);
+        }
+      })
+
       this.boardService.getBoardsByProjects(this.id).subscribe({
         next:(boards) => {
           this.boards = boards;
@@ -47,8 +74,6 @@ export class ProjectBoardsComponent implements OnInit{
       this.router.navigateByUrl("/projects");
     }
   }
-
-  openedTasks: { [taskId: number]: boolean } = {};
 
   isTaskOpen(taskId: number): boolean {
       return this.openedTasks[taskId] || false;
@@ -119,5 +144,123 @@ export class ProjectBoardsComponent implements OnInit{
 
   onDragEnd() {
       this.movingTaskId = null; 
+  }
+
+  openNewTask(boardId:number) {
+    this.currentBoardId = boardId;
+  }
+
+  closeNewTask(title:HTMLInputElement, description:HTMLTextAreaElement) {
+    title.value = "";
+    description.value = "";
+    this.currentBoardId = 0;
+  }
+
+  saveNewTask(title:HTMLInputElement, description:HTMLTextAreaElement, idBoard: number){
+    this.userService.searchUser(this.userService.username()).subscribe({
+      next:(user) => {
+        this.taskService.save({title:title.value,description:description.value,idBoard,idUser:user.id}).subscribe({
+          next:(task) => {
+            this.notyf.success("¡Tarea añadida con éxito!");
+            this.closeNewTask(title,description);
+            this.ngOnInit();
+          },
+          error:(error) => {
+            this.notyf.error(error.error.messages);
+          }    
+        })
+      },
+      error:(error) => {
+        this.notyf.error(error.error.messages);
+      }    
+    })
+  }
+
+  deleteTask(idTask:number){
+    this.taskService.delete(idTask).subscribe({
+      next:(task) => {
+        this.notyf.success("¡Tarea eliminada con éxito!");
+        this.ngOnInit();
+      },
+      error:(error) => {
+        this.notyf.error(error.error.messages);
+      }    
+    })
+  }
+
+  setIdTaskEditing(idTask : number){
+    this.idTaskEditing = idTask;
+    setTimeout(() => {
+      if (this.titleTaskInputEdit) {
+        this.titleTaskInputEdit.nativeElement.focus();
+      }
+    }, 0);
+  }
+
+  closeEdit(task:Task){
+    this.openedTasks[task.id] = false;
+    this.idTaskEditing = 0;
+  }
+
+  updateTask(newTitle : string, newDescription : string, taskUpdate : Task){
+    taskUpdate.title = newTitle;
+    taskUpdate.description = newDescription;
+    this.taskService.update(taskUpdate).subscribe({
+      next:(task) => {
+        this.notyf.success("¡Tarea editada con éxito!");
+        this.ngOnInit();
+        this.closeEdit(task);
+        
+      },
+      error:(error) => {
+        this.notyf.error(error.error.messages);
+      }  
+    })
+  }
+
+  newBoard(){
+    this.isClickNewBoard = true;
+    setTimeout(() => {
+      if (this.nameNewBoard) {
+        this.nameNewBoard.nativeElement.focus();
+      }
+    }, 0);
+  }
+
+  cancelNewBoard(){
+    this.isClickNewBoard = false;
+  }
+
+  saveNewBoard(nameBoard:string){ 
+    this.boardService.save({name:nameBoard, idProject: this.id}).subscribe({
+      next:(board) => {
+        this.notyf.success("¡Tablero añadido con éxito!");
+        this.cancelNewBoard();
+        this.ngOnInit();
+      },
+      error:(error) => {
+        this.notyf.error(error.error.messages);
+      }  
+    })
+  }
+
+  deleteBoard(boardId:number){
+    this.boardService.delete(boardId).subscribe({
+      next:(board) => {
+        this.notyf.success("¡Tablero eliminado con éxito!");
+        this.ngOnInit();
+      },
+      error:(error) => {
+        this.notyf.error(error.error.messages);
+      }  
+    })
+  }
+
+  
+  handleKeydown(event: KeyboardEvent, nameBoard:string) {
+    if (event.key === 'Enter') {
+      event.preventDefault();
+      this.saveNewBoard(nameBoard);
+    }
   }
 }
