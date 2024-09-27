@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { AbstractControl, AsyncValidator, ValidationErrors } from '@angular/forms';
 import { catchError, map, Observable, of } from 'rxjs';
-import { environment } from '../../environments/environment.development';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -10,7 +10,7 @@ import { environment } from '../../environments/environment.development';
 export class ValidateEmailService implements AsyncValidator{
 
   constructor(private http : HttpClient) { }
-
+ 
   private baseUrl : string = environment.urlUser;
 
   validate(control: AbstractControl<any, any>): Observable<ValidationErrors | null> {
