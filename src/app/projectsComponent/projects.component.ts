@@ -4,13 +4,12 @@ import { projectService } from '../services/project.service';
 import { Project } from '../interfaces/interfaces';
 import { Notyf } from 'notyf';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
-import { DialogModule } from 'primeng/dialog';
-import { ButtonModule } from 'primeng/button';
+
 
 @Component({
   selector: 'app-proyectos',
   standalone: true,
-  imports: [RouterLink,DialogModule, ButtonModule],
+  imports: [RouterLink],
   templateUrl: './projects.component.html',
   styleUrl: './projects.component.css'
 })
