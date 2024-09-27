@@ -6,13 +6,25 @@
             <div class="card bg-dark text-light">
                 <div class="card-body">
                     <div class="d-flex">
-                        <div>
-                            <h2 class="card-title mb-0">{{ board.name }}</h2>
-                        </div>
-                        <div class="ms-auto gap-1 d-flex iconsManageBoard mt-1">
-                            <i class="bi bi-trash" (click)="deleteBoard(board.id)"></i>
-                            <i class="bi bi-pencil-square"></i>
-                        </div>
+                        @if (board.id != boardEditing) {
+                            <div>
+                                <h2 class="card-title mb-0">{{ board.name }}</h2>
+                            </div>
+                            <div class="ms-auto gap-1 d-flex iconsManageBoard mt-1">
+                                <i class="bi bi-trash" data-bs-toggle="modal" data-bs-target="#deleteBoardModal" (click)="setDeleteBoard(board)"></i>
+                                <i class="bi bi-pencil-square" (click)="selectEditBoard(board.id)"></i>
+                            </div>
+                        }@else {
+                            <div>
+                                <h2 class="card-title mb-2">
+                                    <input type="text" [value]="board.name" class="addNewTaskText" #newNameBoardEdit/>
+                                </h2>
+                                <div class="d-flex gap-1">
+                                    <a class="btn btn-danger btn-sm bg-gradient" (click)="cancelEditBoard()">Cancelar</a>
+                                    <a class="btn btn-success btn-sm bg-gradient" (click)="editBoard(board)">Editar</a>
+                                </div> 
+                            </div>
+                        }
                     </div>
                     <hr class="mt-1">
 
@@ -157,6 +169,36 @@
             </div>
         </div>
     </div>
+    <div class="modal fade" id="deleteBoardModal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+          <div class="modal-content shadow-lg">
+              <div class="modal-header d-flex bd-highlight">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-left" viewBox="0 0 16 16" data-bs-dismiss="modal" aria-label="Close">
+                      <path fill-rule="evenodd" d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8"/>
+                  </svg>
+                  <h1 class="modal-title fs-5 bd-highlight align-self-center" id="staticBackdropLabel" style="margin: 0 auto;">¿Estás seguro?</h1>
+              </div>                      
+              <div class="modal-body p-4">
+                  <form>
+                      @if(deleteBoardModal.taskDTOs.length == 0){
+                        <div class="mb-3">
+                          ¿Estás seguro de elimar el tablero <span class="text-danger">{{deleteBoardModal.name}}</span>?
+                        </div>
+                      }@else{
+                        <div class="mb-3">
+                          ¿Estás seguro de elimar el proyecto <span class="text-danger">{{deleteBoardModal.name}}</span> y <span class="text-danger">TODAS</span> sus tareas?
+                        </div>
+                      }
+                      <hr>
+                      <div class="d-flex gap-2">
+                          <a class="btn btn-primary bg-gradient w-50" id="cancelButton" data-bs-dismiss="modal">Cancelar</a>
+                          <a class="btn btn-danger bg-gradient w-50" id="loginButton" data-bs-dismiss="modal" (click)="deleteBoard(deleteBoardModal.id)">Confirmar</a>
+                      </div>
+                  </form>
+              </div>
+          </div>
+        </div>
+      </div>
     <div class="separator"></div>
 </div>
 

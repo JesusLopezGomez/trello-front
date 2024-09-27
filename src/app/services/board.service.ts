@@ -21,6 +21,10 @@ export class BoardService {
     return this.http.post<Board>(`${this.baseUrl}/add`,nameAndIdProject);
   }
 
+  update(board:Board):Observable<Board>{
+    return this.http.put<Board>(`${this.baseUrl}/update/${board.id}`,board);
+  }
+
   delete(idBoard:number):Observable<Board>{
     return this.http.delete<Board>(`${this.baseUrl}/delete/${idBoard}`);
   }

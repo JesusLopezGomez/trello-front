@@ -44,9 +44,15 @@ export class ProjectBoardsComponent implements OnInit{
 
   isClickNewBoard : boolean = false;
 
+  boardEditing : number = 0;
+
+  deleteBoardModal : Board = {id: 0, idProject: 0, name: "", taskDTOs:[]};
+
   @ViewChild('titleTaskEdit') titleTaskInputEdit!: ElementRef;
 
   @ViewChild('nameBoard') nameNewBoard!: ElementRef;
+
+  @ViewChild('newNameBoardEdit') nameEditBoard!: ElementRef;
 
   ngOnInit(): void {
     if(!isNaN(this.id)){
@@ -244,6 +250,10 @@ export class ProjectBoardsComponent implements OnInit{
     })
   }
 
+  setDeleteBoard(board:Board){
+    this.deleteBoardModal = board;
+  }
+
   deleteBoard(boardId:number){
     this.boardService.delete(boardId).subscribe({
       next:(board) => {
@@ -256,11 +266,39 @@ export class ProjectBoardsComponent implements OnInit{
     })
   }
 
-  
   handleKeydown(event: KeyboardEvent, nameBoard:string) {
     if (event.key === 'Enter') {
       event.preventDefault();
       this.saveNewBoard(nameBoard);
+    }
+  }
+
+  selectEditBoard(boardId:number){
+    this.boardEditing = boardId;
+    setTimeout(() => {
+      if (this.nameEditBoard) {
+        this.nameEditBoard.nativeElement.focus();
+      }
+    }, 0);
+  }
+
+  cancelEditBoard(){
+    this.boardEditing = 0;
+  }
+
+  editBoard(board:Board){
+    if(this.nameEditBoard){
+      board.name = this.nameEditBoard.nativeElement.value;
+      this.boardService.update(board).subscribe({
+        next:(board) => {
+          this.notyf.success("¡Tablero editado con éxito!");
+          this.cancelEditBoard();
+          this.ngOnInit();
+        },
+        error:(error) => {
+          this.notyf.error(error.error.messages);
+        } 
+      })
     }
   }
 }

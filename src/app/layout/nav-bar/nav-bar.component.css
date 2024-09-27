@@ -36,3 +36,6 @@
     color: transparent !important;
 }
 
+.addProject{
+    cursor: pointer;
+}

@@ -158,3 +158,13 @@ h1.text-center {
 .bi{
     cursor: pointer;
 }
+
+@media only screen and (max-width: 415px){
+    .modal-content{
+        width: 85%;
+    }
+
+    .modal-dialog {
+        justify-content: center !important;
+    }
+}

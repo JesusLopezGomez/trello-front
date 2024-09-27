@@ -6,5 +6,5 @@ export const loggedGuard: CanMatchFn = (route, segments) => {
   const serviceUser = inject(UserService);
   const router = inject(Router);
   
-  return serviceUser.role() !== "admin" && serviceUser.role() !== "user" ? router.navigateByUrl("/") : true;
+  return serviceUser.role() !== "admin" && serviceUser.role() !== "user" ? router.navigateByUrl("/login") : true;
 };

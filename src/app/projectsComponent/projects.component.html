@@ -36,9 +36,15 @@
           </div>                      
           <div class="modal-body p-4">
               <form>
-                  <div class="mb-3">
-                    ¿Estás seguro de elimar el proyecto <span class="text-danger">{{projectEditOrDelete.name}}</span>?
-                  </div>
+                  @if(projectEditOrDelete.boardDTOs.length == 0){
+                    <div class="mb-3">
+                      ¿Estás seguro de elimar el proyecto <span class="text-danger">{{projectEditOrDelete.name}}</span>?
+                    </div>
+                  }@else{
+                    <div class="mb-3">
+                      ¿Estás seguro de elimar el proyecto <span class="text-danger">{{projectEditOrDelete.name}}</span> y <span class="text-danger">TODOS</span> sus tableros?
+                    </div>
+                  }
                   <hr>
                   <div class="d-flex gap-2">
                       <a class="btn btn-primary bg-gradient w-50" id="cancelButton" data-bs-dismiss="modal">Cancelar</a>
