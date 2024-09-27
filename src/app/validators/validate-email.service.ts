@@ -10,7 +10,7 @@ import { environment } from '../../environments/environment';
 export class ValidateEmailService implements AsyncValidator{
 
   constructor(private http : HttpClient) { }
-
+ 
   private baseUrl : string = environment.urlUser;
 
   validate(control: AbstractControl<any, any>): Observable<ValidationErrors | null> {
