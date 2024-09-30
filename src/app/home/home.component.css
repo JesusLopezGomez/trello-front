@@ -1,10 +1,15 @@
 .separator{
-    height: 50px;
+    height: 250px;
 }
 
+.containe{
+    background-image: url("../../assets/wave-haikei\ \(1\).svg");
+}
+
+/*
 header{
     background: linear-gradient(to right, #007bff, #0056b3);
-}
+}*/
 
 .info{
     font-size: 13pt;
@@ -54,6 +59,10 @@ h1, h2 {
 
     .info, .lead, .join{
         font-size: 11pt;
+    }
+
+    .separator{
+        height: 150px;
     }
     
 }
