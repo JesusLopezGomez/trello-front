@@ -3,13 +3,13 @@ import { CommonModule } from '@angular/common';
 import { RouterOutlet } from '@angular/router';
 import { NavBarComponent } from "./layout/nav-bar/nav-bar.component";
 import { CdkDrag, CdkDragDrop, CdkDragHandle, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
-import { DragDropModule } from '@angular/cdk/drag-drop';
 import { FooterComponent } from './layout/footer/footer.component';
+import { NgxUiLoaderModule } from 'ngx-ui-loader';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [CommonModule, RouterOutlet, CdkDrag, CdkDragHandle, DragDropModule, NavBarComponent, FooterComponent],
+  imports: [CommonModule, RouterOutlet, NavBarComponent, FooterComponent, NgxUiLoaderModule],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
 })

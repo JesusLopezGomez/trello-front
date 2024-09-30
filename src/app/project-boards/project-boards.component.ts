@@ -1,10 +1,10 @@
-import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, HostListener, Input, OnInit, ViewChild } from '@angular/core';
 import { Board, Project, Task } from '../interfaces/interfaces';
 import { BoardService } from '../services/board.service';
 import { Notyf } from 'notyf';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
-import { CdkDragDrop, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
+import { CdkDragDrop, CdkDragMove, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { TaskService } from '../services/task.service';
 import { UserService } from '../services/user.service';
@@ -94,34 +94,34 @@ export class ProjectBoardsComponent implements OnInit{
   }
 
   dropTask(event: CdkDragDrop<any[]>, boardIndex: number, boardId:number) {
-      if (event.previousContainer === event.container) {
-          // Si la tarea se reordena dentro del mismo tablero
-          moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
-          let tasksOrders = this.updateOrder(boardId,event.container.data);
-          this.taskService.orderTasks(tasksOrders);
-      } else {
-          // Si la tarea se mueve a otro tablero
-          transferArrayItem(event.previousContainer.data, event.container.data, event.previousIndex, event.currentIndex);
-          
-          let titleTask = event.item.element.nativeElement.lastChild?.lastChild?.firstChild?.textContent;
-          
-          this.boards.map(board => {
-            board.taskDTOs.map(task => {
-              if(task.title == titleTask){
-                task.idBoard = boardId;
-                this.taskService.update(task).subscribe({
-                  next:(task) => {
-                    let tasksOrders = this.updateOrder(boardId,event.container.data);
-                    this.taskService.orderTasks(tasksOrders);
-                  },
-                  error:(error) => {
-                    this.notyf.error(error.error.messages);
-                  }                
-                })
-              }
-            })
+    if (event.previousContainer === event.container) {
+        // Si la tarea se reordena dentro del mismo tablero
+        moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
+        let tasksOrders = this.updateOrder(boardId,event.container.data);
+        this.taskService.orderTasks(tasksOrders);
+    } else {
+        // Si la tarea se mueve a otro tablero
+        transferArrayItem(event.previousContainer.data, event.container.data, event.previousIndex, event.currentIndex);
+        
+        let titleTask = event.item.element.nativeElement.lastChild?.lastChild?.firstChild?.textContent;
+        
+        this.boards.map(board => {
+          board.taskDTOs.map(task => {
+            if(task.title == titleTask){
+              task.idBoard = boardId;
+              this.taskService.update(task).subscribe({
+                next:(task) => {
+                  let tasksOrders = this.updateOrder(boardId,event.container.data);
+                  this.taskService.orderTasks(tasksOrders);
+                },
+                error:(error) => {
+                  this.notyf.error(error.error.messages);
+                }                
+              })
+            }
           })
-      }
+        })
+    }
   }
 
   updateOrder(boardId:number, tasks:Task[]):Task[] {

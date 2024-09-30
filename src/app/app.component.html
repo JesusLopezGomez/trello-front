@@ -1,20 +1,6 @@
 <section class="vh-100">
   <app-nav-bar></app-nav-bar>
-  <!--<div class="container d-flex gap-5 justify-content-center p-5">
-    @for (board of boards; track $index) {
-      <div class="board d-flex flex-column p-3">
-        
-        <h2>{{board.title}}</h2>
-        
-        <div cdkDropList [cdkDropListData]="board.tasks" class="task-list p-2" (cdkDropListDropped)="drop($event)" 
-        [cdkDropListConnectedTo]="getConnectedLists($index)">
-        @for (item of board.tasks; track item) {
-          <div class="task" cdkDrag>{{item}}</div>
-          }
-        </div>
-      </div>
-      }
-    </div>-->
     <router-outlet></router-outlet> 
     <app-footer></app-footer>
+    <ngx-ui-loader [fgsColor]="'#FFFFFF'" [bgsColor]="'#3E3E3E'" [bgsOpacity]="0.5" [pbColor]="'#FFFFFF'" fgsType="wandering-cubes" class="custom-loader"></ngx-ui-loader>
 </section>

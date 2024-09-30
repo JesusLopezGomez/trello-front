@@ -1,6 +1,6 @@
 <nav class="navbar navbar-expand-lg bg-dark">
   <div class="container-fluid">
-    <a class="navbar-brand text-light" routerLink="/projects">TaskFlow</a>
+    <a class="navbar-brand text-light" routerLink="/">TaskFlow</a>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
       aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
@@ -36,10 +36,6 @@
             </svg> {{ username()}}</span>
           </button>
           <ul class="dropdown-menu dropdown-menu-dark">
-            <li><a class="dropdown-item" href="#">Editar perfil</a></li>
-            <li><a class="dropdown-item" href="#">Another action</a></li>
-            <li><a class="dropdown-item" href="#">Something else here</a></li>
-            <li><hr class="dropdown-divider"></li>
             <li><a class="dropdown-item text-danger" routerLink="/" (click)="logout()">Cerrar sesión</a></li>
           </ul>
         </div>

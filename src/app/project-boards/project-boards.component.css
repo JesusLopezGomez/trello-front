@@ -101,6 +101,10 @@ textarea{
     scrollbar-color: #ccc #333; 
 }
 
+.container{
+    overflow-y: auto;
+}
+
 .task-container::-webkit-scrollbar {
     width: 8px; 
 }
