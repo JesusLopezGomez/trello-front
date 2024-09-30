@@ -34,7 +34,7 @@
 .bi-plus-circle:hover{
     transform: scale(1.2) !important;
     color: #28a745;
-    cursor: pointer;
+    cursor: pointer; 
 }
 
 .iconsManage{
